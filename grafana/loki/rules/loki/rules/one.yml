@@ -1,0 +1,11 @@
+groups:
+  - name: credentials_leak
+    rules: 
+      - alert: test-number
+        annotations: 
+          message: "is leaking http basic auth credentials."
+        expr: 'count_over_time({container_name="grafana_go-logs_1"} | logfmt | number="6" [1m]) > 0'
+        for: 10s
+        labels: 
+          severity: critical
+          category: logs

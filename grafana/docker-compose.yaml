@@ -1,0 +1,53 @@
+version: "3"
+
+networks:
+  loki:
+
+services:
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/config.yml
+    volumes:
+      - ./loki/:/etc/loki/
+    networks:
+      - loki
+
+  # promtail:
+  #   image: grafana/promtail:2.0.0
+  #   volumes:
+  #     - /var/log:/var/log
+  #   command: -config.file=/etc/promtail/config.yml
+  #   networks:
+  #     - loki
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - loki
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    ports:
+      - 9093:9093
+    volumes:
+      - ./alertmanager/:/etc/alertmanager/
+    command: --config.file=/etc/alertmanager/config.yml
+    networks:
+      - loki
+
+  go-logs:
+    build:
+      context: ../go-logs
+      dockerfile: Dockerfile
+    networks:
+      - loki
+    logging:
+      driver: loki
+      options:
+        # not sure why it does not work directly
+        # loki-url: "http://loki:3100/loki/api/v1/push"
+        loki-url: "http://host.docker.internal:3100/loki/api/v1/push"
