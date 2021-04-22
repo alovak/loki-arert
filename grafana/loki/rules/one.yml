@@ -1,0 +1,12 @@
+groups:
+  - name: credentials_leak
+    interval: 10s
+    rules: 
+      - alert: test
+        annotations: 
+          message: "message"
+        expr: sum by (container_name) (count_over_time({container_name="grafana_go-logs_1"} | logfmt | errored="true" [5m])) > 1
+        for: 10s
+        labels: 
+          severity: critical
+          category: logs

@@ -37,18 +37,10 @@ To run everything and see logs from `go-logs`:
 * cd ./grafana
 * docker-compose up
 
-
-## Configure Loki as a source in Grafana
-To see the logs from `go-logs` in Grafana:
-
-* open http://localhost:3000 and login under `admin` / `admin`.
-* go to http://localhost:3000/datasources (Configuration)
-* Click "Add data source" and add Loki using "http://loki:3100"
-
 Now, hopefully, you can view all logs: http://localhost:3000/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22expr%22:%22%7Bcontainer_name%3D%5C%22grafana_go-logs_1%5C%22%7D%22%7D%5D
 
 # Test
 
-My idea is to get notification when we receive `number="6"` in logs.
+My idea is to get notification when we receive `errored="true"` in logs.
 
 Unfortunately, I was not able to even see if Loki handles the rule...

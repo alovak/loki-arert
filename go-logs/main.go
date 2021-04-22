@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/moov-io/base/log"
@@ -12,10 +13,16 @@ func main() {
 	for true {
 		i++
 		logger.With(log.Fields{
-			"custom1": log.String("value1"),
-			"custom2": log.String("value2"),
-			"number":  log.Int(i),
+			"service": log.String("paygate"),
+			"number":  log.String(fmt.Sprintf("%d", i)),
 		}).Logf("test")
+
+		if i%3 == 0 {
+			logger.With(log.Fields{
+				"service": log.String("paygate"),
+			}).LogErrorf("failed to do somethgin")
+		}
+
 		time.Sleep(5 * time.Second)
 	}
 }
