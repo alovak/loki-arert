@@ -35,7 +35,7 @@ services:
 
   go-logs:
     build:
-      context: ../go-logs
+      context: ./go-logs
       dockerfile: Dockerfile
     networks:
       - loki

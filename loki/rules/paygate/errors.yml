@@ -1,0 +1,10 @@
+groups:
+  - name: paygate_errors
+    rules: 
+      - alert: transfer_error
+        annotations:
+          message: "paygate error"
+        expr: sum by (host) (count_over_time({container_name="grafana_go-logs_1"} | logfmt | service="paygate" errored="true" [1m])) > 0
+        for: 1m
+        labels: 
+          severity: critical

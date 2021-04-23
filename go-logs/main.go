@@ -12,15 +12,15 @@ func main() {
 	var i int
 	for true {
 		i++
-		logger.With(log.Fields{
+		l := logger.With(log.Fields{
 			"service": log.String("paygate"),
 			"number":  log.String(fmt.Sprintf("%d", i)),
-		}).Logf("test")
+		})
 
-		if i%3 == 0 {
-			logger.With(log.Fields{
-				"service": log.String("paygate"),
-			}).LogErrorf("failed to do somethgin")
+		l.Logf("test")
+
+		if i%6 == 0 {
+			l.LogErrorf("failed to do something: %d", i)
 		}
 
 		time.Sleep(5 * time.Second)
